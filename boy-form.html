@@ -172,7 +172,6 @@
 
 <body>
   <div class="form-wrapper">
-
     <img
       class="logo"
       src="./images/WITHLOVECW.png"
@@ -187,7 +186,6 @@
       </p>
 
       <form id="revealForm">
-
         <label for="babyName">Baby name</label>
         <input
           id="babyName"
@@ -200,40 +198,42 @@
         <div class="hint">
           Example: Baby Smithson
         </div>
-<label for="dueDate">Due date</label>
-<input
-  id="dueDate"
-  name="dueDate"
-  type="text"
-  placeholder="Coming This September!"
-  required
-/>
 
-<div class="hint">
-  Example: Coming This September!
-</div>
-		  <label for="ultrasoundImage">
-  Ultrasound photo
-</label>
+        <label for="dueDate">Due date</label>
+        <input
+          id="dueDate"
+          name="dueDate"
+          type="text"
+          placeholder="Coming This September!"
+          required
+        />
 
-<input
-  id="ultrasoundImage"
-  name="ultrasoundImage"
-  type="file"
-  accept="image/*"
-/>
+        <div class="hint">
+          Example: Coming This September!
+        </div>
 
-<div class="hint">
-  Optional:  Upload your ultrasound or special picture
-</div>
-		  
+        <label for="ultrasoundImage">
+          Ultrasound photo
+        </label>
+
+        <input
+          id="ultrasoundImage"
+          name="ultrasoundImage"
+          type="file"
+          accept="image/*"
+        />
+
+        <div class="hint">
+          Optional: Upload your ultrasound or special picture
+        </div>
+
         <label for="message">Reveal message</label>
         <textarea
-  id="message"
-  name="message"
-  placeholder="We can't wait to meet you!"
-  required
-></textarea>
+          id="message"
+          name="message"
+          placeholder="We can't wait to meet you!"
+          required
+        ></textarea>
 
         <div class="hint">
           Example: We can't wait to meet you!
@@ -242,7 +242,6 @@
         <button type="submit" id="submitButton">
           Create My Reveal
         </button>
-
       </form>
 
       <div id="resultBox">
@@ -320,25 +319,26 @@
     }
 
     function getBasePath() {
-  return window.location.pathname.substring(
-    0,
-    window.location.pathname.lastIndexOf("/") + 1
-  );
-}
+      return window.location.pathname.substring(
+        0,
+        window.location.pathname.lastIndexOf("/") + 1
+      );
+    }
 
-function getRevealPagePath() {
-  return getBasePath() + "index.html";
-}
+    function getRevealPagePath() {
+      return getBasePath() + "index.html";
+    }
 
-function getFormPagePath() {
-  return getBasePath() + "boy-form.html";
-  }
+    function getFormPagePath() {
+      return getBasePath() + "boy-form.html";
+    }
 
     async function loadEditMode() {
       if (!editToken) return;
 
       pageTitle.textContent = "Edit Your Reveal";
-      introText.textContent = "You can update your personalised wording below if you are still within your 24-hour edit window.";
+      introText.textContent =
+        "You can update your personalised wording below if you are still within your 24-hour edit window.";
       submitButton.textContent = "Save My Changes";
 
       const { data, error } = await supabaseClient
@@ -364,80 +364,84 @@ function getFormPagePath() {
 
       editingRevealId = data.id;
 
-      document.getElementById("babyName").value = data.baby_name || "";
-		document.getElementById("dueDate").value =
-  data.due_date || "";
-      document.getElementById("message").value = data.message || "";
+      document.getElementById("babyName").value =
+        data.baby_name || "";
+
+      document.getElementById("dueDate").value =
+        data.due_date || "";
+
+      document.getElementById("message").value =
+        data.message || "";
     }
 
     form.addEventListener("submit", async function(event) {
       event.preventDefault();
 
-     const babyName =
-  document.getElementById("babyName").value.trim();
+      const babyName =
+        document.getElementById("babyName").value.trim();
 
-const dueDate =
-  document.getElementById("dueDate").value.trim();
+      const dueDate =
+        document.getElementById("dueDate").value.trim();
 
-const message =
-  document.getElementById("message").value.trim();
+      const message =
+        document.getElementById("message").value.trim();
 
-const ultrasoundFile =
-  document.getElementById("ultrasoundImage").files[0];
+      const ultrasoundFile =
+        document.getElementById("ultrasoundImage").files[0];
 
       let ultrasoundUrl = null;
 
-if (ultrasoundFile) {
-  const fileExt =
-    ultrasoundFile.name.split(".").pop();
+      if (ultrasoundFile) {
+        const fileExt =
+          ultrasoundFile.name.split(".").pop();
 
-  const fileName =
-    `${Date.now()}-${Math.random()
-      .toString(36)
-      .substring(2)}.${fileExt}`;
+        const fileName =
+          `${Date.now()}-${Math.random()
+            .toString(36)
+            .substring(2)}.${fileExt}`;
 
-  const { error: uploadError } =
-    await supabaseClient.storage
-      .from("ultrasounds")
-      .upload(fileName, ultrasoundFile);
+        const { error: uploadError } =
+          await supabaseClient.storage
+            .from("ultrasounds")
+            .upload(fileName, ultrasoundFile);
 
-  if (uploadError) {
-    alert("Image upload failed. Please try again.");
-    console.error(uploadError);
-    return;
-  }
+        if (uploadError) {
+          alert("Image upload failed. Please try again.");
+          console.error(uploadError);
+          return;
+        }
 
-  const { data: publicUrlData } =
-    supabaseClient.storage
-      .from("ultrasounds")
-      .getPublicUrl(fileName);
+        const { data: publicUrlData } =
+          supabaseClient.storage
+            .from("ultrasounds")
+            .getPublicUrl(fileName);
 
-  ultrasoundUrl =
-    publicUrlData.publicUrl;
-}
-if (editToken && editingRevealId) {
+        ultrasoundUrl =
+          publicUrlData.publicUrl;
+      }
 
-  const updateData = {
-    baby_name: babyName,
-    due_date: dueDate,
-    message: message
-  };
+      if (editToken && editingRevealId) {
+        const updateData = {
+          baby_name: babyName,
+          due_date: dueDate,
+          message: message
+        };
 
-  if (ultrasoundUrl) {
-    updateData.ultrasound_url = ultrasoundUrl;
-  }
+        if (ultrasoundUrl) {
+          updateData.ultrasound_url = ultrasoundUrl;
+        }
 
-  const { error } = await supabaseClient
-    .from("gender-design1")
-    .update(updateData)
-    .eq("id", editingRevealId)
-    .eq("edit_token", editToken);
+        const { error } = await supabaseClient
+          .from("gender-design1")
+          .update(updateData)
+          .eq("id", editingRevealId)
+          .eq("edit_token", editToken);
 
-  if (error) {
-    alert("Something went wrong. Please try again.");
-    console.error(error);
-    return;
-  }
+        if (error) {
+          alert("Something went wrong. Please try again.");
+          console.error(error);
+          return;
+        }
 
         const finalLink =
           window.location.origin +
@@ -445,30 +449,31 @@ if (editToken && editingRevealId) {
           "?id=" +
           editingRevealId;
 
+        const finalEditLink =
+          window.location.origin +
+          getFormPagePath() +
+          "?edit=" +
+          editToken;
+
         revealLink.href = finalLink;
         revealLink.textContent = finalLink;
 
-        const finalEditLink =
-  window.location.origin +
-  getFormPagePath() +
-  "?edit=" +
-  editToken;
+        editLink.href = finalEditLink;
+        editLink.textContent = finalEditLink;
 
-editLink.href = finalEditLink;
-editLink.textContent = finalEditLink;
+        document.getElementById("editSection").style.display =
+          "block";
 
-document.getElementById("editSection").style.display = "block";
+        resultBox.querySelector("h2").textContent =
+          "Your changes have been saved!";
 
-resultBox.querySelector("h2").textContent =
-  "Your changes have been saved!";
+        resultBox.querySelector("p").innerHTML =
+          "<strong>Share this updated reveal link with friends & family:</strong>";
 
-resultBox.querySelector("p").innerHTML =
-  "<strong>Share this updated reveal link with friends & family:</strong>";
+        resultBox.style.display = "block";
+        form.style.display = "none";
 
-resultBox.style.display = "block";
-form.style.display = "none";
-
-return;
+        return;
       }
 
       const id = createUniqueId();
@@ -480,16 +485,16 @@ return;
       const { error } = await supabaseClient
         .from("gender-design1")
         .insert([
-  {
-    id: id,
-    baby_name: babyName,
-    due_date: dueDate,
-    message: message,
-    ultrasound_url: ultrasoundUrl,
-    edit_token: newEditToken,
-    locked_after: lockedAfter.toISOString()
-  }
-]);
+          {
+            id: id,
+            baby_name: babyName,
+            due_date: dueDate,
+            message: message,
+            ultrasound_url: ultrasoundUrl,
+            edit_token: newEditToken,
+            locked_after: lockedAfter.toISOString()
+          }
+        ]);
 
       if (error) {
         alert("Something went wrong. Please try again.");
