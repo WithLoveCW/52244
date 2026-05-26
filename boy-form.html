@@ -195,9 +195,7 @@
           required
         />
 
-        <div class="hint">
-          Example: Baby Smithson
-        </div>
+        <div class="hint">Example: Baby Smithson</div>
 
         <label for="dueDate">Due date</label>
         <input
@@ -208,14 +206,9 @@
           required
         />
 
-        <div class="hint">
-          Example: Coming This September!
-        </div>
+        <div class="hint">Example: Coming This September!</div>
 
-        <label for="ultrasoundImage">
-          Ultrasound photo
-        </label>
-
+        <label for="ultrasoundImage">Ultrasound photo</label>
         <input
           id="ultrasoundImage"
           name="ultrasoundImage"
@@ -235,9 +228,7 @@
           required
         ></textarea>
 
-        <div class="hint">
-          Example: We can't wait to meet you!
-        </div>
+        <div class="hint">Example: We can't wait to meet you!</div>
 
         <button type="submit" id="submitButton">
           Create My Reveal
@@ -447,7 +438,9 @@
           window.location.origin +
           getRevealPagePath() +
           "?id=" +
-          editingRevealId;
+          editingRevealId +
+          "&updated=" +
+          Date.now();
 
         const finalEditLink =
           window.location.origin +
