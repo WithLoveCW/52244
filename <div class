@@ -217,6 +217,11 @@ body {
     margin-top: 60px;
   }
 }
+  @media (max-width: 768px) {
+  .shifted-mobile {
+    padding-top: 14%;
+  }
+}
 @keyframes babyFade {
   from {
     opacity: 0;
@@ -238,7 +243,7 @@ body {
 
     <div class="stars"></div>
 
-    <div class="content">
+    <div class="content shifted-mobile">
      <div id="babyName"></div>
       <div class="heart">♡</div>
     <div id="dueDate"></div>
