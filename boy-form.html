@@ -415,22 +415,30 @@ if (ultrasoundFile) {
   ultrasoundUrl =
     publicUrlData.publicUrl;
 }
-		if (editToken && editingRevealId) {
-        const { error } = await supabaseClient
-          .from("gender-design1")
-          .update({
-  baby_name: babyName,
-  due_date: dueDate,
-  message: message,
-  ultrasound_url: ultrasoundUrl
-})
-          .eq("edit_token", editToken);
+if (editToken && editingRevealId) {
 
-        if (error) {
-          alert("Something went wrong. Please try again.");
-          console.error(error);
-          return;
-        }
+  const updateData = {
+    baby_name: babyName,
+    due_date: dueDate,
+    message: message
+  };
+
+  if (ultrasoundUrl) {
+    updateData.ultrasound_url = ultrasoundUrl;
+  }
+
+  const { error } = await supabaseClient
+    .from("gender-design1")
+    .update(updateData)
+    .eq("id", editingRevealId)
+    .eq("edit_token", editToken);
+
+  if (error) {
+    alert("Something went wrong. Please try again.");
+    console.error(error);
+    return;
+  }
+}
 
         const finalLink =
           window.location.origin +
